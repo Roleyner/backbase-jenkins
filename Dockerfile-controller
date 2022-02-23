@@ -1,0 +1,11 @@
+# Take as base the official Jenkins controller docker image
+FROM jenkins/jenkins:lts
+
+# Skip initial setup
+ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
+
+# Install required plugins
+RUN jenkins-plugin-cli --plugins kubernetes docker-workflow workflow-job workflow-aggregator git configuration-as-code
+
+# Create initial pipeline
+COPY pipeline-conf.groovy /usr/share/jenkins/ref/init.groovy.d/pipeline-conf.groovy
